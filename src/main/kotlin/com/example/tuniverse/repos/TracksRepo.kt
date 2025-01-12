@@ -6,5 +6,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface TracksRepo: CrudRepository<Track, Long> {
-    fun findAllByUsername(username: String): MutableIterable<Track>
+    fun findAllByUser_Username(username: String): MutableIterable<Track>
+    fun findTrackByTrackId(trackId: Int): Track
+    fun findFirstByOrderByTrackIdDesc(): Track
 }

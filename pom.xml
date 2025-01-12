@@ -13,9 +13,19 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>Tuniverse</name>
     <description>Tuniverse</description>
+    <repositories>
+        <repository>
+            <id>tarsos-repo</id>
+            <url>https://github.com/JorenSix/TarsosDSP/releases/download/v2.4/</url>
+        </repository>
+        <repository>
+            <id>jaudiotagger-repo</id>
+            <url>http://www.jthink.net/jaudiotagger/maven</url>
+        </repository>
+    </repositories>
     <properties>
-        <java.version>1.8</java.version>
-        <kotlin.version>1.6.10</kotlin.version>
+        <!-- Define Kotlin version -->
+        <kotlin.version>1.9.10</kotlin.version>
     </properties>
     <dependencies>
         <dependency>
@@ -24,8 +34,74 @@
             <version>1.1.33</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.googlecode.soundlibs/mp3spi -->
+        <dependency>
+            <groupId>com.googlecode.soundlibs</groupId>
+            <artifactId>mp3spi</artifactId>
+            <version>1.9.5-1</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.github.rwl/jtransforms -->
+        <dependency>
+            <groupId>ru.r2cloud</groupId>
+            <artifactId>jradio</artifactId>
+            <version>1.58</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.github.axet/TarsosDSP -->
+        <dependency>
+            <groupId>com.github.axet</groupId>
+            <artifactId>TarsosDSP</artifactId>
+            <version>2.4-1</version>
+        </dependency>
 
 
+        <!-- Spring Boot Starter Web -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- Spring Boot Starter -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+
+
+        <!-- Spring Boot Starter Data JPA -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <!-- Spring Boot Starter Validation -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+
+
+        <dependency>
+            <groupId>org.apache.tika</groupId>
+            <artifactId>tika-core</artifactId>
+            <version>2.8.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jaudiotagger</groupId>
+            <artifactId>jaudiotagger</artifactId>
+            <version>3.0.1</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/jaudiotagger-3.0.1.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>com.mpatric</groupId>
+            <artifactId>mp3agic</artifactId>
+            <version>0.9.1</version>
+        </dependency>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
@@ -58,6 +134,20 @@
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib-jdk8</artifactId>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org/jaudiotagger -->
+        <dependency>
+            <groupId>org</groupId>
+            <artifactId>jaudiotagger</artifactId>
+            <version>2.0.3</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.google.android/android -->
+        <dependency>
+            <groupId>com.google.android</groupId>
+            <artifactId>android</artifactId>
+            <version>4.0.1.2</version>
+            <scope>provided</scope>
+        </dependency>
+
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -79,13 +169,18 @@
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
-
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.27</version>
+        </dependency>
         <dependency>
             <groupId>org.mariadb.jdbc</groupId>
             <artifactId>mariadb-java-client</artifactId>
         </dependency>
 
     </dependencies>
+
 
     <build>
         <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
@@ -95,6 +190,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>
@@ -119,6 +215,14 @@
                         <version>${kotlin.version}</version>
                     </dependency>
                 </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>9</source>
+                    <target>9</target>
+                </configuration>
             </plugin>
         </plugins>
     </build>

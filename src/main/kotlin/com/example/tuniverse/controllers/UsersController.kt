@@ -3,12 +3,8 @@ package com.example.tuniverse.controllers
 import com.example.tuniverse.dto.LoginDto
 import com.example.tuniverse.dto.UserDto
 import com.example.tuniverse.services.UsersService
-import org.apache.catalina.connector.Request
-import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
 import javax.validation.Valid
 import javax.validation.constraints.NotNull
 
@@ -17,10 +13,10 @@ import javax.validation.constraints.NotNull
 class UsersController(val usersService: UsersService) {
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping()
+    @PostMapping("/register")
     fun createUser(
-        @RequestBody
         @Valid
+        @RequestBody
         @NotNull
         user: UserDto
     ): Any {

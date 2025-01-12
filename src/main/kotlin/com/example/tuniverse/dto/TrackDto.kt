@@ -1,12 +1,9 @@
 package com.example.tuniverse.dto
 
-import com.example.tuniverse.entities.Track
-import javax.validation.constraints.NotEmpty
-import javax.validation.constraints.NotNull
-
-open class TrackDto {
-    @NotNull
-    @NotEmpty
-    open lateinit var trackList: MutableIterable<Track>
-
+class TrackDto {
+    lateinit var trackName: String
+    lateinit var username: String
+    var duration: Long = 0
+    lateinit var id: String
+    var albumCover: ByteArray? = null
 }

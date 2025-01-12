@@ -6,9 +6,9 @@ import javax.persistence.*
 @Table(name = "users")
 open class User{
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "user_id", nullable = false)
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    open var id: String? = null
+    open var userId: Int? = null
 
     @Column(name = "username", nullable = false)
     open lateinit var username: String
@@ -24,5 +24,8 @@ open class User{
 
     @Column(name = "email", nullable = false)
     open lateinit var email: String
+
+    @OneToMany(mappedBy = "user")
+    open var tracks: MutableList<Track> = mutableListOf()
 
 }

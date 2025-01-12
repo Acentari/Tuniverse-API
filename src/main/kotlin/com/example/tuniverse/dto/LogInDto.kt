@@ -8,10 +8,10 @@ open class LoginDto {
     @NotNull
     @NotEmpty
     @Pattern(regexp="^[A-Za-z]*$*[0-9]*",message = "Invalid Input")
-    open lateinit var username: String
+    open var username=""
 
     @NotNull
     @NotEmpty
     @Pattern(regexp="[A-Za-z]*\$*[0-9]*",message = "Invalid Input")
-    open lateinit var password: String
+    open var password=""
 }

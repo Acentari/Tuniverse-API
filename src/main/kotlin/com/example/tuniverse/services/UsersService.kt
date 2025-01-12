@@ -3,31 +3,36 @@ package com.example.tuniverse.services
 import com.example.tuniverse.dto.AuthenticationDto
 import com.example.tuniverse.dto.LoginDto
 import com.example.tuniverse.dto.UserDto
+import com.example.tuniverse.exceptions.ValidationErrorException
 import com.example.tuniverse.repos.UsersRepo
-import org.springframework.dao.DataIntegrityViolationException
-import org.springframework.stereotype.Service
-import io.jsonwebtoken.*
+import io.jsonwebtoken.Jwts
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-import javax.security.auth.login.*
-import java.io.*
+import org.springframework.stereotype.Service
+import java.io.File
 
 @Service
 class UsersService(
     val usersRepo: UsersRepo,
     val mapperUserService: MapperUserService,
 ) {
+
+    @Value("\${app.path}")
+    private val appPath: String? = null
+
     fun createUser(
         userDto: UserDto
     ) {
         if (usersRepo.existsByEmail(userDto.email)){
-            throw DataIntegrityViolationException("This email already exists")
+            throw ValidationErrorException("This email already exists")
         }
         if (usersRepo.existsByUsername(userDto.username)){
-            throw DataIntegrityViolationException("This username already exists")
+            throw ValidationErrorException("This username already exists")
         }
         try {
-            val folder = File("/var/www/html/"+userDto.username)
-            folder.mkdir()
+            val folderPath = "$appPath/${userDto.username}"
+            val folder = File(folderPath)
+            val created = folder.mkdirs()
             usersRepo.save(mapperUserService.userDtoToUser(userDto))
         }
         catch (e: Exception) {
@@ -38,30 +43,37 @@ class UsersService(
     fun login(loginDto: LoginDto): Any? {
         val authDto = AuthenticationDto()
         var token = ""
+        println(loginDto.username)
         if (usersRepo.existsByUsername(loginDto.username)) {
             val user = usersRepo.findByUsername(loginDto.username)
             val encrypt = BCryptPasswordEncoder()
             if(encrypt.matches(loginDto.password, user.password)){
-                token = Jwts.builder()
-                    .setPayload(loginDto.username)
-                    .compact()
+                token = Jwts.builder().setPayload(loginDto.username).compact()
                 authDto.token = token
             }
             else {
-                throw LoginException("Authentication failed")
+                throw ValidationErrorException("Authentication failed")
             }
         }
         else {
-            throw LoginException("Authentication failed")
+            throw ValidationErrorException("Authentication failed")
         }
+
         println(Jwts.parser().parse(token).body)
         return authDto
     }
 
+
     fun auth(token: String) {
         val username = Jwts.parser().parse(token).body.toString()
         if (!usersRepo.existsByUsername(username)) {
-            throw LoginException("Authentication failed")
+            throw ValidationErrorException("Authentication failed")
         }
     }
 }
+
+
+
+
+
+

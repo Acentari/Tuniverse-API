@@ -3,15 +3,20 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "tracks")
-open class Track{
+open class Track {
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "track_id", nullable = false)
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    open var id: String? = null
+    open var trackId: Int? = null
 
-    @Column(name = "username", nullable = false)
-    open lateinit var username: String
+    @Column(name="track_name", nullable = false)
+    internal lateinit var trackName: String
 
-    @Column(name = "trackname", nullable = false)
-    open lateinit var trackname: String
+
+    @Column(name="track_duration", nullable = false)
+    open var duration: Long? = 0
+
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    internal lateinit var user: User
 }

@@ -10,7 +10,8 @@ import org.springframework.web.filter.OncePerRequestFilter
 import javax.servlet.FilterChain
 
 @Component
-class RequestFilter : OncePerRequestFilter() {
+class RequestFilter: OncePerRequestFilter() {
+    var token: String? = null
     @Autowired
     lateinit var usersRepo: UsersRepo
     override fun doFilterInternal(
@@ -18,15 +19,22 @@ class RequestFilter : OncePerRequestFilter() {
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-
-        if (request.requestURI == "/api/users/login" || request.requestURI == "/api/users") {
+        if (request.requestURI == "/api/users/login" || request.requestURI == "/api/users/register") {
             filterChain.doFilter(request, response)
         } else {
-            if (request.getHeader("Authorization") == null) {
+            token = getTokenFromRequest(request)
+
+            if (token.isNullOrEmpty()) {
+                token = request.getParameter("access_token")
+                println(token)
+            } 
+
+            if (token.isNullOrEmpty()) {
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Authentication failed")
             } else {
-                val token = request.getHeader("Authorization").substring(7)
+                
                 val username = Jwts.parser().parse(token).body.toString()
+                println(username)
                 if (!usersRepo.existsByUsername(username)) {
                     response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Authentication failed")
                 } else {
@@ -34,6 +42,15 @@ class RequestFilter : OncePerRequestFilter() {
                     filterChain.doFilter(request, response)
                 }
             }
+        }
+    }
+
+    fun getTokenFromRequest(request: HttpServletRequest): String? {
+        val bearerToken = request.getHeader("Authorization")
+        return if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            bearerToken.substring(7)
+        } else {
+            null
         }
     }
 }
